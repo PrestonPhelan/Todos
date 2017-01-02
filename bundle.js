@@ -60,14 +60,24 @@
 	
 	var _store2 = _interopRequireDefault(_store);
 	
+	var _selectors = __webpack_require__(305);
+	
+	var _selectors2 = _interopRequireDefault(_selectors);
+	
+	var _todo_actions = __webpack_require__(219);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	window.store = (0, _store2.default)();
+	var store = (0, _store2.default)();
+	window.store = store;
+	window.allTodos = _selectors2.default;
+	window.receiveTodos = _todo_actions.receiveTodos;
+	window.receiveTodo = _todo_actions.receiveTodo;
 	
 	var App = function App() {
-	  return (
-	    // <Provider store={store}
-	    //
+	  return _react2.default.createElement(
+	    _reactRedux.Provider,
+	    { store: store },
 	    _react2.default.createElement(
 	      'h1',
 	      null,
@@ -23754,8 +23764,12 @@
 	
 	var _todos_reducer = __webpack_require__(218);
 	
+	var _todos_reducer2 = _interopRequireDefault(_todos_reducer);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
 	var rootReducer = (0, _redux.combineReducers)({
-	  todos: _todos_reducer.todosReducer
+	  todos: _todos_reducer2.default
 	});
 	
 	exports.default = rootReducer;
@@ -23778,8 +23792,23 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
+	var initialState = {
+	  1: {
+	    id: 1,
+	    title: "wash car",
+	    body: "with soap",
+	    done: false
+	  },
+	  2: {
+	    id: 2,
+	    title: "wash dog",
+	    body: "with shampoo",
+	    done: true
+	  }
+	};
+	
 	var todosReducer = function todosReducer() {
-	  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+	  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : initialState;
 	  var action = arguments[1];
 	
 	  Object.freeze(state);
@@ -26490,6 +26519,23 @@
 	
 	module.exports = isIterateeCall;
 
+
+/***/ },
+/* 305 */
+/***/ function(module, exports) {
+
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	var allTodos = function allTodos(state) {
+	  return Object.keys(state.todos).map(function (todo) {
+	    return state.todos[todo];
+	  });
+	};
+	
+	exports.default = allTodos;
 
 /***/ }
 /******/ ]);
