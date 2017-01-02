@@ -26617,8 +26617,6 @@
 	
 	var _todo_actions = __webpack_require__(219);
 	
-	var _todo_actions2 = _interopRequireDefault(_todo_actions);
-	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var mapStateToProps = function mapStateToProps(state) {
@@ -26629,11 +26627,13 @@
 	
 	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 	  return {
-	    receieveTodo: function receieveTodo(todo) {
-	      return dispatch((0, _todo_actions2.default)(todo));
+	    receiveTodo: function receiveTodo(todo) {
+	      return dispatch((0, _todo_actions.receiveTodo)(todo));
 	    }
 	  };
 	};
+	
+	// debugger;
 	
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_todo_list2.default);
 
@@ -26655,19 +26655,30 @@
 	
 	var _todo_list_item2 = _interopRequireDefault(_todo_list_item);
 	
+	var _todo_form = __webpack_require__(311);
+	
+	var _todo_form2 = _interopRequireDefault(_todo_form);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var TodoList = function TodoList(_ref) {
-	  var todos = _ref.todos;
+	  var todos = _ref.todos,
+	      receiveTodo = _ref.receiveTodo;
 	
 	  var listItems = todos.map(function (todo, idx) {
 	    return _react2.default.createElement(_todo_list_item2.default, { key: idx, todo: todo });
 	  });
+	  // debugger;
 	
 	  return _react2.default.createElement(
-	    'ul',
+	    'div',
 	    null,
-	    listItems
+	    _react2.default.createElement(
+	      'ul',
+	      null,
+	      listItems
+	    ),
+	    _react2.default.createElement(_todo_form2.default, { receiveTodo: receiveTodo })
 	  );
 	};
 	exports.default = TodoList;
@@ -26720,6 +26731,112 @@
 	}(_react2.default.Component);
 	
 	exports.default = TodoListItem;
+
+/***/ },
+/* 311 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	function uniqueId() {
+	  return new Date().getTime();
+	}
+	
+	var TodoForm = function (_React$Component) {
+	  _inherits(TodoForm, _React$Component);
+	
+	  function TodoForm(props) {
+	    _classCallCheck(this, TodoForm);
+	
+	    var _this = _possibleConstructorReturn(this, (TodoForm.__proto__ || Object.getPrototypeOf(TodoForm)).call(this, props));
+	
+	    _this.state = { title: "", body: "", id: 0, done: false };
+	    _this.updateTitle = _this.updateTitle.bind(_this);
+	    _this.handleSubmit = _this.handleSubmit.bind(_this);
+	    _this.updateBody = _this.updateBody.bind(_this);
+	    return _this;
+	  }
+	
+	  _createClass(TodoForm, [{
+	    key: "updateTitle",
+	    value: function updateTitle(e) {
+	      this.setState({ title: e.target.value });
+	    }
+	  }, {
+	    key: "updateBody",
+	    value: function updateBody(e) {
+	      this.setState({ body: e.target.value });
+	    }
+	  }, {
+	    key: "handleSubmit",
+	    value: function handleSubmit(e) {
+	      e.preventDefault();
+	      this.state.id = uniqueId();
+	      this.props.receiveTodo(this.state);
+	      this.setState({ title: "", body: "", id: 0, done: false });
+	    }
+	  }, {
+	    key: "render",
+	    value: function render() {
+	      return _react2.default.createElement(
+	        "div",
+	        null,
+	        _react2.default.createElement(
+	          "form",
+	          { onSubmit: this.handleSubmit },
+	          _react2.default.createElement(
+	            "label",
+	            null,
+	            "Title",
+	            _react2.default.createElement("br", null),
+	            _react2.default.createElement("input", {
+	              type: "text",
+	              id: "title",
+	              onChange: this.updateTitle,
+	              value: this.state.title })
+	          ),
+	          _react2.default.createElement("br", null),
+	          _react2.default.createElement(
+	            "label",
+	            null,
+	            "Body ",
+	            _react2.default.createElement("br", null),
+	            _react2.default.createElement("textarea", {
+	              onChange: this.updateBody,
+	              value: this.state.body })
+	          ),
+	          _react2.default.createElement(
+	            "button",
+	            null,
+	            "Add Todo"
+	          )
+	        )
+	      );
+	    }
+	  }]);
+	
+	  return TodoForm;
+	}(_react2.default.Component);
+	
+	exports.default = TodoForm;
 
 /***/ }
 /******/ ]);
