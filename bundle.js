@@ -75,6 +75,7 @@
 	window.allTodos = _selectors2.default;
 	window.receiveTodos = _todo_actions.receiveTodos;
 	window.receiveTodo = _todo_actions.receiveTodo;
+	window.removeTodo = _todo_actions.removeTodo;
 	
 	document.addEventListener('DOMContentLoaded', function () {
 	  _reactDom2.default.render(_react2.default.createElement(_root2.default, { store: store }), document.getElementById('root'));
@@ -23809,6 +23810,10 @@
 	      var newState = (0, _merge2.default)({}, state);
 	      newState[action.todo.id] = action.todo;
 	      return newState;
+	    case _todo_actions.REMOVE_TODO:
+	      var newestState = (0, _merge2.default)({}, state);
+	      delete newestState[action.todo.id];
+	      return newestState;
 	    default:
 	      return state;
 	  }
@@ -23827,6 +23832,7 @@
 	});
 	var RECEIVE_TODOS = exports.RECEIVE_TODOS = "RECEIVE_TODOS";
 	var RECEIVE_TODO = exports.RECEIVE_TODO = "RECEIVE_TODO";
+	var REMOVE_TODO = exports.REMOVE_TODO = "REMOVE_TODO";
 	
 	var receiveTodos = exports.receiveTodos = function receiveTodos(todos) {
 	  return {
@@ -23838,6 +23844,13 @@
 	var receiveTodo = exports.receiveTodo = function receiveTodo(todo) {
 	  return {
 	    type: RECEIVE_TODO,
+	    todo: todo
+	  };
+	};
+	
+	var removeTodo = exports.removeTodo = function removeTodo(todo) {
+	  return {
+	    type: REMOVE_TODO,
 	    todo: todo
 	  };
 	};
@@ -26629,6 +26642,9 @@
 	  return {
 	    receiveTodo: function receiveTodo(todo) {
 	      return dispatch((0, _todo_actions.receiveTodo)(todo));
+	    },
+	    removeTodo: function removeTodo(todo) {
+	      return dispatch((0, _todo_actions.removeTodo)(todo));
 	    }
 	  };
 	};
@@ -26663,12 +26679,12 @@
 	
 	var TodoList = function TodoList(_ref) {
 	  var todos = _ref.todos,
-	      receiveTodo = _ref.receiveTodo;
+	      receiveTodo = _ref.receiveTodo,
+	      removeTodo = _ref.removeTodo;
 	
 	  var listItems = todos.map(function (todo, idx) {
-	    return _react2.default.createElement(_todo_list_item2.default, { key: idx, todo: todo });
+	    return _react2.default.createElement(_todo_list_item2.default, { key: idx, todo: todo, removeTodo: removeTodo, receiveTodo: receiveTodo });
 	  });
-	  // debugger;
 	
 	  return _react2.default.createElement(
 	    'div',
@@ -26699,6 +26715,10 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
+	var _merge = __webpack_require__(220);
+	
+	var _merge2 = _interopRequireDefault(_merge);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -26713,16 +26733,50 @@
 	  function TodoListItem(props) {
 	    _classCallCheck(this, TodoListItem);
 	
-	    return _possibleConstructorReturn(this, (TodoListItem.__proto__ || Object.getPrototypeOf(TodoListItem)).call(this, props));
+	    var _this = _possibleConstructorReturn(this, (TodoListItem.__proto__ || Object.getPrototypeOf(TodoListItem)).call(this, props));
+	
+	    _this.deleteTodo = _this.deleteTodo.bind(_this);
+	    _this.changeDone = _this.changeDone.bind(_this);
+	    _this.doneButtonText = _this.doneButtonText.bind(_this);
+	    return _this;
 	  }
 	
 	  _createClass(TodoListItem, [{
+	    key: 'deleteTodo',
+	    value: function deleteTodo(e) {
+	      e.preventDefault;
+	      this.props.removeTodo(this.props.todo);
+	    }
+	  }, {
+	    key: 'changeDone',
+	    value: function changeDone(e) {
+	      e.preventDefault;
+	      var newTodo = (0, _merge2.default)({}, this.props.todo);
+	      this.props.todo.done === true ? newTodo.done = false : newTodo.done = true;
+	      this.props.receiveTodo(newTodo);
+	    }
+	  }, {
+	    key: 'doneButtonText',
+	    value: function doneButtonText() {
+	      return this.props.todo.done === true ? "Undo" : "Done";
+	    }
+	  }, {
 	    key: 'render',
 	    value: function render() {
 	      return _react2.default.createElement(
 	        'li',
 	        null,
-	        this.props.todo.title
+	        this.props.todo.title,
+	        _react2.default.createElement(
+	          'button',
+	          { onClick: this.deleteTodo },
+	          'Delete'
+	        ),
+	        _react2.default.createElement(
+	          'button',
+	          { onClick: this.changeDone },
+	          this.doneButtonText()
+	        )
 	      );
 	    }
 	  }]);
