@@ -49,6 +49,7 @@ class TodoForm extends React.Component {
           </label>
           <button>Add Todo</button>
         </form>
+        {this.props.errors.join(', ')}
       </div>
     );
   }
