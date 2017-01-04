@@ -8,7 +8,7 @@ class TodoForm extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = {title: "", body: "", id: 0, done: false};
+    this.state = {title: "", body: "", done: false};
     this.updateTitle = this.updateTitle.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.updateBody = this.updateBody.bind(this);
@@ -24,9 +24,8 @@ class TodoForm extends React.Component {
 
   handleSubmit(e) {
     e.preventDefault();
-    this.state.id = uniqueId();
-    this.props.receiveTodo(this.state);
-    this.setState({title: "", body: "", id: 0, done: false});
+    console.log(this.state);
+    this.props.createTodo(this.state).then( () => this.setState({title: "", body: ""}));
   }
 
   render () {

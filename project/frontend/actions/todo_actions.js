@@ -20,5 +20,9 @@ export const removeTodo = todo => ({
 });
 
 export const fetchTodos = () => dispatch => {
-  APIUtil.getTodos().then(data => dispatch(receiveTodos(data)));
+  return APIUtil.getTodos().then(data => dispatch(receiveTodos(data)));
+};
+
+export const createTodo = (todo) => dispatch => {
+  return APIUtil.saveTodo(todo).then(data => dispatch(receiveTodo(data)));
 };
